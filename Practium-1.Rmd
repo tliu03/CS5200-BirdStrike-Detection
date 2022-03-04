@@ -1,0 +1,12 @@
+---
+title: "Practicum 1"
+output: html_notebook
+---
+
+
+```{r}
+raw_data <- read.csv("BirdStrikesData.csv")
+raw_data
+
+```
+
