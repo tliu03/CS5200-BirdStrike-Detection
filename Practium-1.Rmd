@@ -3,6 +3,15 @@ title: "Practicum 1"
 output: html_notebook
 ---
 
+```{r}
+install.packages("RMySQL")
+library(RMySQL)
+```
+
+```{r}
+
+dbcon = dbConnect(MySQL(), user='root', password='root', dbname='practicum_1', host='localhost')
+```
 
 ```{r}
 raw_data <- read.csv("BirdStrikesData.csv")
@@ -10,3 +19,24 @@ raw_data
 
 ```
 
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Operator (
+  operator_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  operator_name TEXT NOT NULL
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Airplane (
+  airplane_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  aircraft_type TEXT NOT NULL,
+  altitude Number NOT NULL,
+  make_model TEXT NOT NULL,
+  number_of_engines Number NOT NULL,
+  operator_id Number NOT NULL,
+  is_large Number NOT NULL,
+  FOREIGN KEY (operator_id) REFERENCES operator (operator_id) ON UPDATE 
+CASCADE
+);
+```
