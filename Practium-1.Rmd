@@ -31,12 +31,101 @@ CREATE TABLE IF NOT EXISTS Operator (
 CREATE TABLE IF NOT EXISTS Airplane (
   airplane_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   aircraft_type TEXT NOT NULL,
-  altitude Number NOT NULL,
+  altitude INTEGER NOT NULL,
   make_model TEXT NOT NULL,
-  number_of_engines Number NOT NULL,
-  operator_id Number NOT NULL,
-  is_large Number NOT NULL,
+  number_of_engines INTEGER NOT NULL,
+  operator_id INTEGER NOT NULL,
+  is_large INTEGER NOT NULL,
   FOREIGN KEY (operator_id) REFERENCES operator (operator_id) ON UPDATE 
 CASCADE
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Precipitation_type (
+  precipitation_type_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  precipitation TEXT NOT NULL
+);
+```
+
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Conditions (
+  conditions_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  precipitation_type_id INTEGER NOT NULL,
+  FOREIGN KEY (precipitation_type_id) REFERENCES Precipitation_type (precipitation_type_id) ON UPDATE 
+CASCADE
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Airport (
+  airport_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name TEXT NOT NULL,
+  origin_state TEXT NOT NULL
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Flights (
+  flight_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  airport_id INTEGER NOT NULL,
+  remarks TEXT NOT NULL,
+  feet_above_ground INTEGER NOT NULL,
+  conditions_id INTEGER,
+  airplane_id INTEGER NOT NULL,
+  FOREIGN KEY (airport_id) REFERENCES Airport (airport_id) ON UPDATE CASCADE,
+  FOREIGN KEY (conditions_id) REFERENCES Conditions (conditions_id) ON UPDATE CASCADE,
+  FOREIGN KEY (airplane_id) REFERENCES Airplane (airplane_id) ON UPDATE CASCADE
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Wildlife_Struck_Range (
+  wildlife_struck_range_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  range_num TEXT NOT NULL
+);
+```
+
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Wildlife_species (
+  species_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  species TEXT NOT NULL
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Wildlife_size (
+  size_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  size TEXT NOT NULL
+);
+```
+
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Wildlife (
+  wildlife_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  size_id INTEGER NOT NULL,
+  species_id INTEGER NOT NULL,
+  FOREIGN KEY (size_id) REFERENCES Wildlife_size (size_id) ON UPDATE CASCADE,
+  FOREIGN KEY (species_id) REFERENCES Wildlife_species (species_id) ON UPDATE CASCADE
+);
+```
+
+```{sql connection=dbcon}
+CREATE TABLE IF NOT EXISTS Incidents (
+  incident_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  people_injured INTEGER NOT NULL,
+  cost_total INTEGER NOT NULL,
+  flight_id INTEGER NOT NULL,
+  wildlife_id INTEGER NOT NULL,
+  remarks TEXT,
+  remains_of_wildlife_collected  INTEGER,
+  remains_sent INTEGER,
+  wildlife_struck_range_id INTEGER NOT NULL,
+  FOREIGN KEY (flight_id) REFERENCES Flights (flight_id) ON UPDATE CASCADE,
+  FOREIGN KEY (wildlife_id) REFERENCES Wildlife (wildlife_id) ON UPDATE CASCADE,
+  FOREIGN KEY (wildlife_struck_range_id) REFERENCES Wildlife_Struck_Range (wildlife_struck_range_id) ON UPDATE CASCADE
 );
 ```
