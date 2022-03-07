@@ -10,7 +10,7 @@ library(RMySQL)
 
 ```{r}
 
-dbcon = dbConnect(MySQL(), user='root', password='root', dbname='practicum_1', host='localhost')
+dbcon = dbConnect(MySQL(), user='root', password='root1234', dbname='practicum_1', host='localhost')
 ```
 
 ```{r}
@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS Flights (
   feet_above_ground INTEGER NOT NULL,
   conditions_id INTEGER,
   airplane_id INTEGER NOT NULL,
+  flight_date DATE NOT NULL,
   FOREIGN KEY (airport_id) REFERENCES Airport (airport_id) ON UPDATE CASCADE,
   FOREIGN KEY (conditions_id) REFERENCES Conditions (conditions_id) ON UPDATE CASCADE,
   FOREIGN KEY (airplane_id) REFERENCES Airplane (airplane_id) ON UPDATE CASCADE
@@ -121,6 +122,7 @@ CREATE TABLE IF NOT EXISTS Incidents (
   flight_id INTEGER NOT NULL,
   wildlife_id INTEGER NOT NULL,
   remarks TEXT,
+  phase_of_flight TEXT,
   remains_of_wildlife_collected  INTEGER,
   remains_sent INTEGER,
   wildlife_struck_range_id INTEGER NOT NULL,
