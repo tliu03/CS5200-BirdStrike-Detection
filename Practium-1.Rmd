@@ -19,7 +19,11 @@ raw_data
 
 ```
 
-
+```{sql connection=dbcon}
+SELECT concat('DROP TABLE IF EXISTS `', table_name, '`;')
+FROM information_schema.tables
+WHERE table_schema = 'Practium_1';
+```
 ```{sql connection=dbcon}
 CREATE TABLE IF NOT EXISTS Operator (
   operator_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -44,7 +48,7 @@ CASCADE
 ```{sql connection=dbcon}
 CREATE TABLE IF NOT EXISTS Precipitation_type (
   precipitation_type_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  precipitation TEXT NOT NULL
+  precipitation TEXT
 );
 ```
 
@@ -52,9 +56,7 @@ CREATE TABLE IF NOT EXISTS Precipitation_type (
 ```{sql connection=dbcon}
 CREATE TABLE IF NOT EXISTS Conditions (
   conditions_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  precipitation_type_id INTEGER NOT NULL,
-  FOREIGN KEY (precipitation_type_id) REFERENCES Precipitation_type (precipitation_type_id) ON UPDATE 
-CASCADE
+  condition TEXT
 );
 ```
 
@@ -75,6 +77,8 @@ CREATE TABLE IF NOT EXISTS Flights (
   conditions_id INTEGER,
   airplane_id INTEGER NOT NULL,
   flight_date DATE NOT NULL,
+  precipitation_type_id INTEGER NOT NULL,
+  FOREIGN KEY (precipitation_type_id) REFERENCES Precipitation_type (precipitation_type_id) ON UPDATE CASCADE,
   FOREIGN KEY (airport_id) REFERENCES Airport (airport_id) ON UPDATE CASCADE,
   FOREIGN KEY (conditions_id) REFERENCES Conditions (conditions_id) ON UPDATE CASCADE,
   FOREIGN KEY (airplane_id) REFERENCES Airplane (airplane_id) ON UPDATE CASCADE
